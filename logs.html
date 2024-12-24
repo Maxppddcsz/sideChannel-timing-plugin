@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Request Logs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #282c34;
+            color: #61dafb;
+            text-align: center;
+        }
+
+        h1 {
+            background-color: #20232a;
+            color: #61dafb;
+            margin: 0;
+            padding: 15px 0;
+        }
+
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 90%;
+            max-width: 1000px;
+            background-color: #20232a;
+            border: 1px solid #61dafb;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #61dafb;
+            color: #61dafb;
+        }
+
+        th {
+            background-color: #20232a;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background-color: #333842;
+        }
+
+        button {
+            background-color: #61dafb;
+            color: #20232a;
+            border: none;
+            padding: 10px 20px;
+            margin: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #21a1f1;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Request Logs</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>URL</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Latency (ms)</th>
+                <th>Message</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="logTable">
+            <tr>
+                <td colspan="6">Loading logs...</td>
+            </tr>
+        </tbody>
+    </table>
+    <button id="exportLogs">Export Logs</button>
+    <script src="logs.js"></script>
+</body>
+
+</html>
