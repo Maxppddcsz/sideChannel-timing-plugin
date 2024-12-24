@@ -1,4 +1,3 @@
-// 打开日志页面
 document.getElementById("viewLogs").addEventListener("click", () => {
     chrome.tabs.create({ url: chrome.runtime.getURL("logs.html") });
 });
@@ -17,6 +16,19 @@ chrome.storage.local.get("requestLogs", (data) => {
     }
 });
 
+// 保存用户输入的URL
+document.getElementById("saveUrl").addEventListener("click", () => {
+    const url = document.getElementById("urlInput").value.trim();
+    if (!url) {
+        alert("Please enter a URL to listen.");
+        return;
+    }
+
+    chrome.storage.local.set({ listenUrl: url }, () => {
+        alert(`Listening to: ${url}`);
+        console.log(`Listening to: ${url}`);
+    });
+});
 
 // 自动向 ChatGPT 后端发送请求
 document.getElementById("sendRequest").addEventListener("click", async () => {
