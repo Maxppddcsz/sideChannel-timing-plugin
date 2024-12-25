@@ -51,7 +51,7 @@
       background-color: #21a1f1;
     }
 
-    input {
+    select {
       width: 80%;
       padding: 8px;
       margin: 10px 0;
@@ -66,9 +66,16 @@
 <body>
   <h1>ChatGPT Timing Tracker</h1>
   <div class="latency" id="latestLatency">Loading latest latency...</div>
-  <input type="text" id="urlInput" placeholder="Enter URL to listen">
+
+  <!-- 添加下拉框 -->
+  <select id="siteSelector">
+    <option value="chatgpt">ChatGPT</option>
+    <option value="kimi">Kimi</option>
+  </select>
+
   <button id="saveUrl">Save URL</button>
   <button id="viewLogs">View Logs</button>
+
   <script src="popup.js"></script>
 </body>
 

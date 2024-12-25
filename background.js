@@ -1,11 +1,14 @@
 let requestTimes = {};
 let requestLogs = [];
-let listenUrl = "https://chatgpt.com/backend-api/conversation"; // Default URL
+let listenUrlPattern = "https://kimi.moonshot.cn/api/chat/ctl731c06opf5s5cki00/completion/stream"; // 默认 URL 为 ChatGPT
 
 // 动态监听请求
 chrome.storage.onChanged.addListener((changes, area) => {
+  console.log(changes.listenUrl);
   if (area === "local" && changes.listenUrl) {
-    listenUrl = changes.listenUrl.newValue || listenUrl;
+    console.log(`updateRequestListener`);
+    listenUrlPattern = changes.listenUrl.newValue || listenUrlPattern;
+    console.log(listenUrlPattern);
     updateRequestListener();
   }
 });
@@ -14,28 +17,30 @@ function updateRequestListener() {
   chrome.webRequest.onBeforeRequest.removeListener(requestListener);
   chrome.webRequest.onHeadersReceived.removeListener(responseListener);
   chrome.webRequest.onErrorOccurred.removeListener(errorListener);
-
-  // 使用新的 URL 更新监听器
+  console.log(`addListener`);
+  // 使用正则表达式匹配 URL 更新监听器
   chrome.webRequest.onBeforeRequest.addListener(
     requestListener,
-    { urls: [listenUrl] },
+    { urls: [listenUrlPattern] },
     ["requestBody"]
   );
 
   chrome.webRequest.onHeadersReceived.addListener(
     responseListener,
-    { urls: [listenUrl] }
+    { urls: [listenUrlPattern] }
   );
 
   chrome.webRequest.onErrorOccurred.addListener(
     errorListener,
-    { urls: [listenUrl] }
+    { urls: [listenUrlPattern] }
   );
 }
 
 // 监听请求的开始时间
 function requestListener(details) {
+  console.log(`requestListener`);
   const url = details.url;
+  console.log(url);
   let requestBody = "";
 
   if (details.requestBody && details.requestBody.raw && details.requestBody.raw.length > 0) {
@@ -44,9 +49,16 @@ function requestListener(details) {
   }
 
   let messageContent = null;
+  console.log(url);
+  // 根据URL判断是ChatGPT还是Kimi，提取不同的消息格式
   try {
     const parsedBody = JSON.parse(requestBody);
-    messageContent = parsedBody?.messages?.[0]?.content?.parts?.join(" ") || null;
+
+    if (url.includes("conversation")) {
+      messageContent = parsedBody?.messages?.[0]?.content?.parts?.join(" ") || null; // ChatGPT 格式
+    } else if (url.includes("stream")) {
+      messageContent = parsedBody?.messages?.[0]?.content || null; // Kimi 格式
+    }
   } catch (e) {
     console.error("Failed to parse request body:", e);
   }
